@@ -74,7 +74,7 @@ namespace Contract_Science
 				}
 			}
 			ContractScienceUtils.Logging("Successfully Added {0} New Experiments To Contract List", ContractScienceUtils.availableScience.Count);
-			foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("DM_SCIENCE_STORY_DEF"))
+			foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("SCIENCE_STORY_DEF"))
 			{
 				foreach (ConfigNode storyNode in node.GetNodes("SCIENCE_BACKSTORY"))
 				{
