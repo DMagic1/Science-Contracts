@@ -129,7 +129,7 @@ namespace Contract_Science
 			if (scienceContainer.agent != "Any")
 				this.agent = Contracts.Agents.AgentList.Instance.GetAgent(scienceContainer.agent);
 
-			this.AddParameter(new DMCollectScience(body, targetSituation, sub, exp, biome), null);
+			this.AddParameter(new FurtherCollectScience(body, targetSituation, sub, exp, biome), null);
 			ContractScienceUtils.DebugLog("Parameter Added");
 			base.SetExpiry(10 * sub.subjectValue, Math.Max(15, 15 * sub.subjectValue) * (float)(this.prestige + 1));
 			base.SetScience(Math.Max(exp.baseValue, (exp.baseValue * sub.subjectValue) / 2) * ContractScienceUtils.science, body);
@@ -332,7 +332,7 @@ namespace Contract_Science
 
 	#region Contract Parameter
 
-	public class DMCollectScience : CollectScience
+	public class FurtherCollectScience : CollectScience
 	{
 		public CelestialBody body;
 		public ExperimentSituations scienceLocation;
@@ -340,11 +340,11 @@ namespace Contract_Science
 		public ScienceExperiment exp;
 		public string biomeName;
 
-		public DMCollectScience()
+		public FurtherCollectScience()
 		{
 		}
 
-		public DMCollectScience(CelestialBody target, ExperimentSituations location, ScienceSubject Subject, ScienceExperiment Exp, string BiomeName)
+		public FurtherCollectScience(CelestialBody target, ExperimentSituations location, ScienceSubject Subject, ScienceExperiment Exp, string BiomeName)
 		{
 			body = target;
 			scienceLocation = location;
