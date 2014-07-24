@@ -24,6 +24,7 @@ THE SOFTWARE.
 */
 #endregion
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Contract_Science
@@ -35,6 +36,8 @@ namespace Contract_Science
 		private void Start()
 		{
 			ContractScienceUtils.rand = new System.Random();
+			ContractScienceUtils.availableScience = new Dictionary<string, contractScienceContainer>();
+			ContractScienceUtils.storyList = new List<string>();
 			ContractScienceUtils.DebugLog("Generating Global Random Number Generator");
 			configLoad();
 		}
@@ -54,22 +57,22 @@ namespace Contract_Science
 				}
 			foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("CONTRACT_EXPERIMENT"))
 			{
-				string name, part, techNode, agent, expID = "";
+				string name, part, agent, expID = "";
 				expID = node.GetValue("experimentID");
 				ScienceExperiment exp = ResearchAndDevelopment.GetExperiment(expID);
 				if (exp != null)
 				{
 					name = node.GetValue("name");
 					part = node.GetValue("part");
-					if (node.HasValue("techNode"))
-						techNode = node.GetValue("techNode");
-					else
-						techNode = "None";
+					//if (node.HasValue("techNode"))
+					//    techNode = node.GetValue("techNode");
+					//else
+					//    techNode = "None";
 					if (node.HasValue("agent"))
 						agent = node.GetValue("agent");
 					else
 						agent = "Any";
-					ContractScienceUtils.availableScience.Add(name, new contractScienceContainer(expID, exp, part, techNode, agent));
+					ContractScienceUtils.availableScience.Add(name, new contractScienceContainer(expID, exp, part, agent));
 					ContractScienceUtils.Logging("New Experiment: [{0}] Available For Contracts", exp.experimentTitle);
 				}
 			}
@@ -103,15 +106,13 @@ namespace Contract_Science
 		internal string name;
 		internal ScienceExperiment exp;
 		internal string sciPart;
-		internal string sciNode;
 		internal string agent;
 
-		internal contractScienceContainer(string expName, ScienceExperiment sciExp, string sciPartID, string sciTechNode, string agentName)
+		internal contractScienceContainer(string expName, ScienceExperiment sciExp, string sciPartID, string agentName)
 		{
 			name = expName;
 			exp = sciExp;
 			sciPart = sciPartID;
-			sciNode = sciTechNode;
 			agent = agentName;
 		}
 	}
