@@ -47,16 +47,16 @@ namespace Contract_Science
 		}
 
 		#region Debug Logging
-#if DEBUG
 
 		internal static void DebugLog(string s, params object[] stringObjects)
 		{
+#if DEBUG
 			s = string.Format(s, stringObjects);
 			string finalLog = string.Format("[CS] {0}", s);
 			Debug.Log(finalLog);
+#endif
 		}
 
-#endif
 		#endregion
 
 
