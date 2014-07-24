@@ -170,7 +170,10 @@ namespace Contract_Science
 		protected override string GetDescription()
 		{
 			string story = ContractScienceUtils.storyList[rand.Next(0, ContractScienceUtils.storyList.Count)];
-			return string.Format(story, this.agent.Name, ContractScienceUtils.availableScience.FirstOrDefault(v => v.Value == scienceContainer).Key, body.theName, aPart.title, targetSituation); ;
+			if (aPart != null)
+				return string.Format(story, this.agent.Name, ContractScienceUtils.availableScience.FirstOrDefault(v => v.Value == scienceContainer).Key, body.theName, aPart.title, targetSituation);
+			else
+				return string.Format(story, this.agent.Name, ContractScienceUtils.availableScience.FirstOrDefault(v => v.Value == scienceContainer).Key, body.theName, "Kerbal", targetSituation);
 		}
 
 		protected override string GetSynopsys()
@@ -226,10 +229,19 @@ namespace Contract_Science
 			name = node.GetValue("ScienceExperiment");
 			if (ContractScienceUtils.availableScience.TryGetValue(name, out scienceContainer))
 			{
-				aPart = ResearchAndDevelopment.Instance.GetTechState(scienceContainer.sciNode).partsPurchased.FirstOrDefault(p => p.name == scienceContainer.sciPart);
+				try
+				{
+					aPart = ResearchAndDevelopment.Instance.GetTechState(scienceContainer.sciNode).partsPurchased.FirstOrDefault(p => p.name == scienceContainer.sciPart);
+				}
+				catch
+				{
+					ContractScienceUtils.DebugLog("No Valid Part Associated With This Experiment");
+					aPart = null;
+				}
 				ScienceExperiment tryExp = scienceContainer.exp;
 				if (tryExp != null)
 					exp = tryExp;
+				ContractScienceUtils.DebugLog("Science Experiment Loaded");
 			}
 			if (int.TryParse(node.GetValue("ScienceLocation"), out targetLocation))
 				targetSituation = (ExperimentSituations)targetLocation;
@@ -290,10 +302,20 @@ namespace Contract_Science
 				expSitList.Add(ExperimentSituations.FlyingHigh);
 			if (((ExperimentSituations)i & ExperimentSituations.FlyingLow) == ExperimentSituations.FlyingLow && b.atmosphere)
 				expSitList.Add(ExperimentSituations.FlyingLow);
-			if (((ExperimentSituations)i & ExperimentSituations.InSpaceHigh) == ExperimentSituations.InSpaceHigh && !exp.requireAtmosphere)
-				expSitList.Add(ExperimentSituations.InSpaceHigh);
-			if (((ExperimentSituations)i & ExperimentSituations.InSpaceLow) == ExperimentSituations.InSpaceLow && !exp.requireAtmosphere)
-				expSitList.Add(ExperimentSituations.InSpaceLow);
+			if (((ExperimentSituations)i & ExperimentSituations.InSpaceHigh) == ExperimentSituations.InSpaceHigh)
+			{
+				if (!exp.requireAtmosphere)
+					expSitList.Add(ExperimentSituations.InSpaceHigh);
+				else if (b.atmosphere)
+					expSitList.Add(ExperimentSituations.InSpaceHigh);
+			}
+			if (((ExperimentSituations)i & ExperimentSituations.InSpaceLow) == ExperimentSituations.InSpaceLow)
+			{
+				if (!exp.requireAtmosphere)
+					expSitList.Add(ExperimentSituations.InSpaceLow);
+				else if (b.atmosphere)
+					expSitList.Add(ExperimentSituations.InSpaceLow);
+			}
 			if (((ExperimentSituations)i & ExperimentSituations.SrfLanded) == ExperimentSituations.SrfLanded && b.pqsController != null)
 			{
 				if (!exp.requireAtmosphere)
