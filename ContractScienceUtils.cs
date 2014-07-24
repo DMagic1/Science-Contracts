@@ -26,8 +26,6 @@ THE SOFTWARE.
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Contract_Science
@@ -35,9 +33,9 @@ namespace Contract_Science
 	static class ContractScienceUtils
 	{
 		internal static System.Random rand;
-		internal static Dictionary<string, contractScienceContainer> availableScience = new Dictionary<string, contractScienceContainer>();
+		internal static Dictionary<string, contractScienceContainer> availableScience;
 		internal static float science, reward, forward, penalty;
-		internal static List<string> storyList = new List<string>();
+		internal static List<string> storyList;
 
 		internal static void Logging(string s, params object[] stringObjects)
 		{
