@@ -45,7 +45,7 @@ namespace Contract_Science
 		private ExperimentSituations targetSituation;
 		private contractScienceContainer scienceContainer;
 		private AvailablePart aPart = null;
-		private ProtoTechNode pTechNode = null;
+		//private ProtoTechNode pTechNode = null;
 		private List<ExperimentSituations> situations;
 		private string biome = "";
 		private string name;
@@ -55,29 +55,20 @@ namespace Contract_Science
 
 		protected override bool Generate()
 		{
+			if (!GetBodies_Reached(true, true).Contains(FlightGlobals.Bodies[1]))
+				return false;
 			scienceContainer = ContractScienceUtils.availableScience.ElementAt(rand.Next(0, ContractScienceUtils.availableScience.Count)).Value;
 			name = ContractScienceUtils.availableScience.FirstOrDefault(n => n.Value == scienceContainer).Key;
-			ContractScienceUtils.DebugLog("Generating Contract Now");
+			ContractScienceUtils.DebugLog("Checking Contract Requirements");
 			if (scienceContainer.sciPart != "None")
 			{
-				ContractScienceUtils.DebugLog("Standard Experiment Generating");
-				pTechNode = ResearchAndDevelopment.Instance.GetTechState(scienceContainer.sciNode);
-				if (pTechNode == null)
+				ContractScienceUtils.DebugLog("Checking For Part {0} Now", scienceContainer.sciPart);
+				aPart = PartLoader.getPartInfoByName(scienceContainer.sciPart);
+				if (aPart == null)
 					return false;
-				else
-				{
-					ContractScienceUtils.DebugLog("Tech Node Found");
-					if (pTechNode.state != RDTech.State.Available)
-						return false;
-					else
-					{
-						ContractScienceUtils.DebugLog("Tech Node Researched");
-						aPart = pTechNode.partsPurchased.FirstOrDefault(p => p.name == scienceContainer.sciPart);
-						if (aPart == null)
-							return false;
-						ContractScienceUtils.DebugLog("Part: [{0}] Purchased", aPart.name);
-					}
-				}
+				if (!ResearchAndDevelopment.PartModelPurchased(aPart))
+					return false;
+				ContractScienceUtils.DebugLog("Part: [{0}] Purchased; Contract Meets Requirements", aPart.name);
 			}
 
 			if (body == null)
@@ -86,6 +77,7 @@ namespace Contract_Science
 				if (body == null)
 					return false;
 			}
+
 			if (exp == null)
 			{
 				exp = scienceContainer.exp;
@@ -231,7 +223,7 @@ namespace Contract_Science
 			{
 				try
 				{
-					aPart = ResearchAndDevelopment.Instance.GetTechState(scienceContainer.sciNode).partsPurchased.FirstOrDefault(p => p.name == scienceContainer.sciPart);
+					aPart = PartLoader.getPartInfoByName(scienceContainer.sciPart);
 				}
 				catch
 				{
@@ -276,6 +268,10 @@ namespace Contract_Science
 			else if (this.prestige == ContractPrestige.Significant)
 			{
 				bList = GetBodies_Reached(false, true);
+				if (!bList.Contains(FlightGlobals.Bodies[2]))
+					bList.Add(FlightGlobals.Bodies[2]);
+				if (!bList.Contains(FlightGlobals.Bodies[3]))
+					bList.Add(FlightGlobals.Bodies[3]);
 				if (bList.Count == 0)
 					return null;
 				return bList[rand.Next(0, bList.Count)];
