@@ -58,6 +58,8 @@ namespace Contract_Science
 		{
 			if (!GetBodies_Reached(true, true).Contains(FlightGlobals.Bodies[1]))
 				return false;
+			if (ContractSystem.Instance.GetCurrentContracts<ContractScience>().Count() > 3)
+				return false;
 			scienceContainer = ContractScienceUtils.availableScience.ElementAt(rand.Next(0, ContractScienceUtils.availableScience.Count)).Value;
 			name = ContractScienceUtils.availableScience.FirstOrDefault(n => n.Value == scienceContainer).Key;
 			ContractScienceUtils.DebugLog("Checking Contract Requirements");
