@@ -37,6 +37,16 @@ namespace Contract_Science
 		internal static float science, reward, forward, penalty;
 		internal static List<string> storyList;
 
+		internal static float getSubjectValue(ExperimentSituations s, CelestialBody body)
+		{
+			float subV = 1;
+			if (s == ExperimentSituations.SrfLanded) subV = body.scienceValues.LandedDataValue;
+			else if (s == ExperimentSituations.SrfSplashed) subV = body.scienceValues.SplashedDataValue;
+			else if (s == ExperimentSituations.FlyingLow || s == ExperimentSituations.FlyingHigh) subV = body.scienceValues.FlyingLowDataValue;
+			else if (s == ExperimentSituations.InSpaceLow || s == ExperimentSituations.InSpaceHigh) subV = body.scienceValues.InSpaceLowDataValue;
+			return subV;
+		}
+
 		internal static void Logging(string s, params object[] stringObjects)
 		{
 			s = string.Format(s, stringObjects);
