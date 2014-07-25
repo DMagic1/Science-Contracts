@@ -63,11 +63,10 @@ namespace Contract_Science
 				if (exp != null)
 				{
 					name = node.GetValue("name");
-					part = node.GetValue("part");
-					//if (node.HasValue("techNode"))
-					//    techNode = node.GetValue("techNode");
-					//else
-					//    techNode = "None";
+					if (node.HasValue("part"))
+						part = node.GetValue("part");
+					else
+						part = "None";
 					if (node.HasValue("agent"))
 						agent = node.GetValue("agent");
 					else
