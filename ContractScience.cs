@@ -129,7 +129,7 @@ namespace Contract_Science
 			this.AddParameter(new FurtherCollectScience(body, targetSituation, exp, biome), null);
 			ContractScienceUtils.DebugLog("Parameter Added");
 			base.SetExpiry(10 * subjectValue, Math.Max(15, 15 * subjectValue) * (float)(this.prestige + 1));
-			base.SetScience(Math.Max(exp.baseValue, (exp.baseValue * subjectValue) / 2) * ContractScienceUtils.science, body);
+			base.SetScience(Math.Max(exp.baseValue, (exp.baseValue * subjectValue) / 3) * ContractScienceUtils.science, body);
 			base.SetDeadlineDays(20f * subjectValue * (float)(this.prestige + 1), body);
 			base.SetReputation(5f * (float)(this.prestige + 1), 10f * (float)(this.prestige + 1), body);
 			base.SetFunds(100f * subjectValue * ContractScienceUtils.forward, 1000f * subjectValue * ContractScienceUtils.reward, 500f * subjectValue * ContractScienceUtils.penalty, body);
@@ -429,7 +429,7 @@ namespace Contract_Science
 			node.AddValue("ScienceTarget", body.flightGlobalsIndex);
 			node.AddValue("ScienceExperiment", exp.id);
 			node.AddValue("ScienceLocation", (int)scienceLocation);
-			node.AddValue("Biome", biomeName.Replace(" ", ""));
+			node.AddValue("Biome", biomeName);
 		}
 
 		protected override void OnLoad(ConfigNode node)
@@ -444,7 +444,7 @@ namespace Contract_Science
 			if (int.TryParse(node.GetValue("ScienceLocation"), out targetLocation))
 				scienceLocation = (ExperimentSituations)targetLocation;
 			biomeName = node.GetValue("Biome");
-			subject = string.Format("{0}@{1}{2}{3}", exp.id, body.name, scienceLocation, biomeName);
+			subject = string.Format("{0}@{1}{2}{3}", exp.id, body.name, scienceLocation, biomeName.Replace(" ", ""));
 		}
 
 		private void scienceRecieve(float sci, ScienceSubject sub)
