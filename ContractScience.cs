@@ -58,7 +58,7 @@ namespace Contract_Science
 		{
 			if (!GetBodies_Reached(true, true).Contains(FlightGlobals.Bodies[1]))
 				return false;
-			if (ContractSystem.Instance.GetCurrentContracts<ContractScience>().Count() > 3)
+			if (ContractSystem.Instance.GetCurrentContracts<ContractScience>().Count() > 2)
 				return false;
 			scienceContainer = ContractScienceUtils.availableScience.ElementAt(rand.Next(0, ContractScienceUtils.availableScience.Count)).Value;
 			name = ContractScienceUtils.availableScience.FirstOrDefault(n => n.Value == scienceContainer).Key;
@@ -287,6 +287,8 @@ namespace Contract_Science
 					bList.Remove(FlightGlobals.Bodies[2]);
 				if (bList.Contains(FlightGlobals.Bodies[3]))
 					bList.Remove(FlightGlobals.Bodies[3]);
+				if (bList.Count == 0)
+					bList = GetBodies_Reached(false, true);
 				return bList[rand.Next(0, bList.Count)];
 			}
 			return null;
