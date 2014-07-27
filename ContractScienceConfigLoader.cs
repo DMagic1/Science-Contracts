@@ -44,6 +44,7 @@ namespace Contract_Science
 
 		private void configLoad()
 		{
+			//Load in global reward modifiers from config file
 			foreach (ConfigNode setNode in GameDatabase.Instance.GetConfigNodes("CONTRACT_SETTINGS"))
 				if (setNode.GetValue("name") == "Contract Settings")
 				{
@@ -55,6 +56,7 @@ namespace Contract_Science
 						ContractScienceUtils.science, ContractScienceUtils.reward, ContractScienceUtils.forward, ContractScienceUtils.penalty);
 					break;
 				}
+			//Load in experiments from config file
 			foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("CONTRACT_EXPERIMENT"))
 			{
 				string name, part, agent, expID = "";
@@ -74,8 +76,11 @@ namespace Contract_Science
 					ContractScienceUtils.availableScience.Add(name, new contractScienceContainer(expID, exp, part, agent));
 					ContractScienceUtils.Logging("New Experiment: [{0}] Available For Contracts", exp.experimentTitle);
 				}
+				else
+					ContractScienceUtils.Logging("Experiment: [{0}] Not Found", expID);
 			}
 			ContractScienceUtils.Logging("Successfully Added {0} New Experiments To Contract List", ContractScienceUtils.availableScience.Count);
+			//Load in contract descriptions from config file
 			foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("SCIENCE_STORY_DEF"))
 			{
 				foreach (ConfigNode storyNode in node.GetNodes("SCIENCE_BACKSTORY"))
@@ -91,7 +96,7 @@ namespace Contract_Science
 					}
 				}
 			}
-			ContractScienceUtils.Logging("Successfully Added {0} New Backstories to Story List", ContractScienceUtils.storyList.Count);
+			ContractScienceUtils.Logging("Successfully Added {0} New Backstories To Story List", ContractScienceUtils.storyList.Count);
 		}
 
 		private void OnDestroy()
@@ -99,21 +104,4 @@ namespace Contract_Science
 		}
 
 	}
-
-	internal class contractScienceContainer
-	{
-		internal string name;
-		internal ScienceExperiment exp;
-		internal string sciPart;
-		internal string agent;
-
-		internal contractScienceContainer(string expName, ScienceExperiment sciExp, string sciPartID, string agentName)
-		{
-			name = expName;
-			exp = sciExp;
-			sciPart = sciPartID;
-			agent = agentName;
-		}
-	}
-
 }
