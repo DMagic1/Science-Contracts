@@ -52,7 +52,7 @@ namespace Contract_Science
 			scienceLocation = location;
 			biomeName = BiomeName;
 			name = Name;
-			ContractScienceUtils.availableScience.TryGetValue(Name, out scienceContainer);
+			ContractScienceUtils.availableScience.TryGetValue(name, out scienceContainer);
 			subject = string.Format("{0}@{1}{2}{3}", scienceContainer.exp.id, body.name, scienceLocation, biomeName.Replace(" ", ""));
 		}
 
@@ -157,6 +157,7 @@ namespace Contract_Science
 			ContractScienceUtils.DebugLog("Loading Contract Parameter");
 			int targetBodyID, targetLocation;
 			string[] scienceString = node.GetValue("Science_Subject").Split('|');
+			name = scienceString[0];
 			ContractScienceUtils.availableScience.TryGetValue(scienceString[0], out scienceContainer);
 			if (int.TryParse(scienceString[1], out targetBodyID))
 				body = FlightGlobals.Bodies[targetBodyID];
